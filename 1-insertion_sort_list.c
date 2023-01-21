@@ -10,44 +10,50 @@
 
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *head = *list;
-	listint_t *this = NULL, *last = NULL, *after = NULL, *post_after = NULL;
-	int now, next;
+	listint_t *head = NULL;
+	listint_t *temp = NULL;
 	bool state = false;
 
-	if (head == NULL)
+	if (!list || !(*list) || !(*list)->next)
 		return;
 
-	while (head != NULL)
+	head = *list;
+	while (head->next != NULL)
 	{
-		while (head->next != NULL)
+		if (head->n > head->next->n)
 		{
-			now = head->n;
-			next = head->next->n;
-			if (next < now)
-			{
-				this = head;
-				last = head->prev;
-				after = head->next;
-				post_after = head->next->next;
+			head->next->prev = head->prev;
 
-				if (last != NULL)
-					last->next = after;
-				after->prev = last;
-				after->prev = last;
-				this->prev = after;
-				if (post_after != NULL)
-				{
-					this->next = post_after;
-					post_after->prev = this;
-				}
+			if (head->prev)
+				head->prev->next = head->next;
+
+			head->next->next = head;
+
+			if (head->next->next)
+				head->next->next = head;
+
+			head->next = head->next->next;
+			head->prev = head->prev;
+			head = head->prev;
+
+			print_list(*list);
+			state = true;
+
+			if (head->prev && head->n < head->prev->n)
+			{
+				if (!state)
+					temp = head->next;
 				state = true;
-				print_list(*list);
+				head = head->prev;
+				continue;
 			}
-			head = head->next;
 		}
-		if (state == false)
-			return;
-		head = head->next;
+		if (!state && head->next != NULL)
+			head = head->next;
+		else
+		{
+			head = temp;
+			state = false;
+		}
 	}
 }
