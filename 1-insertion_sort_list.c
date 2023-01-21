@@ -2,7 +2,7 @@
 #include <stdbool.h>
 
 /**
- * insertion_sort_list - sorts using insertion sort algorithm
+ * insertion_sort_list - sorts doubly-linked list using insertion sort algo.
  *
  *  @list: doubly linked list to be sorted
  * Return: None
@@ -11,12 +11,12 @@
 void insertion_sort_list(listint_t **list)
 {
 	listint_t *head = *list;
-	listint_t *temp = head;
+	listint_t *this = NULL, *last = NULL, *after = NULL, *post_after = NULL;
 	int now, next;
 	bool state = false;
 
 	if (head == NULL)
-		return (NULL);
+		return;
 
 	while (head != NULL)
 	{
@@ -24,47 +24,30 @@ void insertion_sort_list(listint_t **list)
 		{
 			now = head->n;
 			next = head->next->n;
-
-			if (now == next)
-				continue;
-
-			else if (next > now)
+			if (next < now)
 			{
-				temp = head;
-				if (temp->prev->next != NULL)
-					temp->prev->next = head->next;
+				this = head;
+				last = head->prev;
+				after = head->next;
+				post_after = head->next->next;
 
-				temp->next->prev = head->prev;
-				temp->prev = head->next;
-				temp->next = head->next->next;
-				temp->next->next->prev = head;
+				if (last != NULL)
+					last->next = after;
+				after->prev = last;
+				after->prev = last;
+				this->prev = after;
+				if (post_after != NULL)
+				{
+					this->next = post_after;
+					post_after->prev = this;
+				}
 				state = true;
-				print_list(list);
+				print_list(*list);
 			}
-
-			else
-				continue;
+			head = head->next;
 		}
 		if (state == false)
 			return;
 		head = head->next;
 	}
 }
-
-/**
- * this algorithm sorts the smallest to the left
- *
- * create a nested for loop
- *
- * assign 2 pointers
- * 1 to the current, the 2nd to the next
- *
- * if the 2 matches, continues,
- * else if next is smaller than current,
- * swap their positions
- *
- * print the list at every swap.
- *
- * if no more swaps, exit the loop
- *
- */
