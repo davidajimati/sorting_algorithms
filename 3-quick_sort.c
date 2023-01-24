@@ -1,64 +1,80 @@
 #include "sort.h"
 
-void swap(int a, int b);
-int partition(int *array, int ub, int lb);
-void quicker(int *array, int lb, int ub);
-
+void quick_sort_rec(int *array, int lower, int higher, size_t size);
+int lomuto_partition(int *array, int lower, int higher, size_t size);
 /**
- * quick_sort - algorithm to sorts array of ints
+ * quick_sort - ...
+ * @array: ...
+ * @size: ...
  *
- * @array: to be sorted
- * @size: of array
- * Return: None
-*/
-
+ * Return: Nothing!
+ */
 void quick_sort(int *array, size_t size)
 {
-	int lb, ub;
-
-	if (size < 2)
+	if (!array || size < 2)
 		return;
 
-	lb = array[0];
-	ub = array[size - 1];
-
-	quicker(array, lb, ub);
+	quick_sort_rec(array, 0, size - 1, size);
 }
 
-int partition(int *array, int ub, int lb)
+/**
+ * quick_sort_rec - ...
+ * @array: ...
+ * @lower: ...
+ * @higher: ...
+ * @size: ...
+ *
+ * Return: Nothing!
+ */
+void quick_sort_rec(int *array, int lower, int higher, size_t size)
 {
-	int pivot = array[lb];
-	int start = lb;
-	int end = ub;
+	int lop = 0;
 
-	while (start < end)
+	if (lower < higher)
 	{
-		while (array[start] <= pivot)
-			start++;
-		while (array[end] > pivot)
-			end--;
-		if (start < end)
-			swap(array[start], array[end]);
+		lop = lomuto_partition(array, lower, higher, size);
+		quick_sort_rec(array, lower, lop - 1, size);
+		quick_sort_rec(array, lop + 1, higher, size);
 	}
-	swap(array[start], array[end]);
-	return (end);
 }
 
-void swap(int a, int b)
+/**
+ * lomuto_partition - ...
+ * @array: ...
+ * @lower: ...
+ * @higher: ...
+ * @size: ...
+ *
+ * Return: Nothing!
+ */
+int lomuto_partition(int *array, int lower, int higher, size_t size)
 {
-	int temp = a;
-	a = b;
-	b = temp;
-}
+	int i = 0, j = 0, pvt = 0, aux = 0;
 
-void quicker(int *array, int lb, int ub)
-{
-	int loc;
+	pvt = array[higher];
+	i = lower;
 
-	if (lb < ub)
+	for (j = lower; j < higher; ++j)
 	{
-		loc = partition(array, ub, lb);
-		quicker(array, lb, loc - 1);
-		quicker(array, loc + 1, ub);
+		if (array[j] < pvt)
+		{
+			aux = array[i];
+			array[i] = array[j];
+			array[j] = aux;
+
+			if (aux != array[i])
+				print_array(array, size);
+
+			++i;
+		}
 	}
+
+	aux = array[i];
+	array[i] = array[higher];
+	array[higher] = aux;
+
+	if (aux != array[i])
+		print_array(array, size);
+
+	return (i);
 }
