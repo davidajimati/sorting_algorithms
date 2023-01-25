@@ -1,9 +1,13 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "array": "c"
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c"
     },
     "cSpell.words": [
-        "bitonic"
+        "bitonic",
+        "lomuto"
     ]
 }

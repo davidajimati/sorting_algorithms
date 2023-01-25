@@ -2,7 +2,7 @@
 
 void sort_engine(int *array, int b, int ub, size_t size);
 void swap(int *array, int loc_a, int loc_b);
-int lomuto_partition(int *array, int lb, int ub);
+int lomuto_partition(int *array, int lb, int ub, size_t size);
 
 /**
  * quick_sort - sorting algorithm
@@ -29,11 +29,33 @@ void quick_sort(int *array, size_t size)
  * @array: target
  * @lb: lower bound
  * @ub: upper bound
+ * @size: of array
  * Return: Pivot
  */
 
-int lomuto_partition(int *array, int lb, int ub)
+int lomuto_partition(int *array, int lb, int ub, size_t size)
 {
+	int pivot = array[lb];
+	int start = lb;
+	int end = ub;
+
+	while (start < end)
+	{
+		while (array[start] <= pivot)
+			start++;
+
+		while (array[end] > pivot)
+			end--;
+
+		if (start < end)
+		{
+			swap(array, start, end);
+			print_array(array, size);
+		}
+	}
+	swap(array, pivot, end);
+	print_array(array, size);
+	return (end);
 }
 
 /**
@@ -42,10 +64,20 @@ int lomuto_partition(int *array, int lb, int ub)
  * @array: subject
  * @lb: lower bound
  * @ub: upper bound
+ * @size: of array
  * Return: Nothing
  */
 void sort_engine(int *array, int lb, int ub, size_t size)
 {
+	int loc;
+
+	sort_engine(array, lb, ub, size);
+	if (lb < ub)
+	{
+		loc = lomuto_partition(array, lb, ub, size);
+		sort_engine(array, lb, loc - 1, size);
+		sort_engine(array, loc + 1, ub, size);
+	}
 }
 
 /**
