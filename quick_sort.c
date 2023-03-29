@@ -1,7 +1,6 @@
 #include "sort.h"
-#include <stdlib.h>
 
-void sort_engine(int *array, int low, int high, size_t size);
+void engine(int *array, int low, int upper, size_t size);
 
 /**
  * quick_sort - sorting algorithm
@@ -13,37 +12,37 @@ void sort_engine(int *array, int low, int high, size_t size);
 
 void quick_sort(int *array, size_t size)
 {
-
 	if (!array || size < 2)
 		return;
 
-	sort_engine(array, 0, size - 1, size);
+	engine(array, 0, size - 1, size);
 }
 
 /**
- * sort_engine - performs the sort
+ * engine - does the sorting
  *
  * @array: subject
- * @low: lower bound
- * @high: upper bound
+ * @low: lower boundary
+ * @upper: upper boundary
  * @size: of array
- * Return: Nothing
- */
+ * Return: Nothing.
+*/
 
-void sort_engine(int *array, int low, int high, size_t size)
+void engine(int *array, int low, int upper, size_t size)
 {
 	int pivot, i, j, temp;
 
-	if (low < high)
+	if (low < upper)
 	{
 		pivot = low;
 		i = low;
-		j = high;
+		j = upper;
 
-		while (i < j)
+		if (i < j)
 		{
-			while (array[i] <= array[pivot] && i <= high)
+			while (array[i] <= array[pivot] && i <= upper)
 				i++;
+
 			while (array[j] > array[pivot] && j >= low)
 				j--;
 
@@ -55,12 +54,13 @@ void sort_engine(int *array, int low, int high, size_t size)
 				print_array(array, size);
 			}
 		}
-
 		temp = array[j];
 		array[j] = array[pivot];
 		array[pivot] = temp;
-		sort_engine(array, low, j - 1, size);
-		sort_engine(array, j + 1, high, size);
+
+		/* initiate the recursion */
+		engine(array, low, j - 1, size);
+		engine(array, j + 1, upper, size);
 		print_array(array, size);
-	}
+}
 }
